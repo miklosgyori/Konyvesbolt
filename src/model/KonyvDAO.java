@@ -154,4 +154,37 @@ public class KonyvDAO {
 
         return talalatok;
     }
+
+    /**
+     * id alapjan kikeres es visszaad egy konyvet.
+     * @param id, a keresendo konyv id-je
+     * @return konyv vs null (ha a parameterkent megadott id-val nem letezik konyv az AB-ben)
+     */
+    public Konyv getBookById(int id) {
+        String sql = "SELECT * FROM konyvesbolt.konyv WHERE konyv_id = ?";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Konyv(
+                        rs.getInt("konyv_id"),
+                        rs.getString("szerzok"),
+                        rs.getString("cim"),
+                        rs.getString("kiado"),
+                        rs.getDate("kiadas_eve") != null ? rs.getDate("kiadas_eve").toLocalDate() : null,
+                        rs.getInt("egysegar"),
+                        rs.getShort("keszlet")
+                );
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error fetching book by ID: " + e.getMessage());
+        }
+
+        return null;
+    }
 }

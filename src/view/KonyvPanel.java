@@ -101,11 +101,37 @@ public class KonyvPanel extends JPanel {
      * Uj konyvet ad az adatbazishoz, a felhasznalo altal a GUI-ban megadott adatokkal.
      */
     private void addNewBook() {
-        new AddBookDialog().setVisible(true);
+        new BookFormDialog(null).setVisible(true);
     }
 
+    /**
+     * Az adatbazisbol id alapjan kivalasztott konyv mezoit modithatja a felhasznalo a GUI-n,
+     * a valtozasokat menti az adatbazisban.
+     */
     private void editSelectedBook() {
-        JOptionPane.showMessageDialog(this, "Edit book form not yet implemented.");
+        String input = JOptionPane.showInputDialog(this, "Enter the Book ID to edit:");
+
+        if (input == null || input.trim().isEmpty()) {
+            return; // Cancelled or empty input
+        }
+
+        try {
+            int id = Integer.parseInt(input.trim());
+
+            KonyvDAO dao = new KonyvDAO();
+            Konyv book = dao.getBookById(id);
+
+            if (book == null) {
+                JOptionPane.showMessageDialog(this, "No book found with ID: " + id,
+                        "Not Found", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            new BookFormDialog(book).setVisible(true);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid ID format.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void deleteSelectedBook() {
@@ -152,10 +178,11 @@ public class KonyvPanel extends JPanel {
         }
     }
 
+    // TODO: torolheto, ha a BookFormDIalog (alabb) jol mukodik
     /**
      * Belso osztaly: input form definialas; a megadott adatokkal uj konyv hozzaadasa az AB-hoz.
      */
-    private class AddBookDialog extends JDialog {
+    /* private class AddBookDialog extends JDialog {
         private JTextField szerzokField, cimField, kiadoField, evField, arField, keszletField;
         private JButton saveButton, cancelButton;
 
@@ -219,6 +246,98 @@ public class KonyvPanel extends JPanel {
 
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Hiba: " + ex.getMessage(), "Hibas adat!", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+        }
+    }*/
+
+    /**
+     * Belso osztaly: input form definialas; a megadott adatokkal uj konyv hozzaadasa az AB-hoz VAGY letezo konyv
+     * mezoinek szerkesztese.
+     */
+    private class BookFormDialog extends JDialog {
+        private JTextField szerzokField, cimField, kiadoField, evField, arField, keszletField;
+        private JButton saveButton, cancelButton;
+        private Konyv existingBook;
+
+        public BookFormDialog(Konyv bookToEdit) {
+            this.existingBook = bookToEdit;
+            setTitle(bookToEdit == null ? "➕ Add New Book" : "📝 Edit Book");
+            setModal(true);
+            setLayout(new GridLayout(7, 2, 8, 4));
+            setSize(400, 300);
+            setLocationRelativeTo(KonyvPanel.this);
+
+            // Fields
+            szerzokField = new JTextField();
+            cimField = new JTextField();
+            kiadoField = new JTextField();
+            evField = new JTextField();
+            arField = new JTextField();
+            keszletField = new JTextField();
+
+            // Pre-fill if editing
+            if (bookToEdit != null) {
+                szerzokField.setText(bookToEdit.getSzerzok());
+                cimField.setText(bookToEdit.getCim());
+                kiadoField.setText(bookToEdit.getKiado());
+                if (bookToEdit.getKiadasEve() != null) {
+                    evField.setText(String.valueOf(bookToEdit.getKiadasEve().getYear()));
+                }
+                arField.setText(String.valueOf(bookToEdit.getEgysegar()));
+                keszletField.setText(String.valueOf(bookToEdit.getKeszlet()));
+            }
+
+            // Buttons
+            saveButton = new JButton("💾 Save");
+            cancelButton = new JButton("❌ Cancel");
+
+            // Layout
+            add(new JLabel("Szerzők:")); add(szerzokField);
+            add(new JLabel("Cím:*"));    add(cimField);
+            add(new JLabel("Kiadó:"));   add(kiadoField);
+            add(new JLabel("Kiadás éve:")); add(evField);
+            add(new JLabel("Egységár:*"));  add(arField);
+            add(new JLabel("Készlet:*"));   add(keszletField);
+            add(saveButton); add(cancelButton);
+
+            cancelButton.addActionListener(e -> dispose());
+
+            saveButton.addActionListener(e -> {
+                try {
+                    String szerzok = szerzokField.getText().trim();
+                    String cim = cimField.getText().trim();
+                    String kiado = kiadoField.getText().trim();
+                    String ev = evField.getText().trim();
+                    String ar = arField.getText().trim();
+                    String keszlet = keszletField.getText().trim();
+
+                    if (cim.isEmpty() || ar.isEmpty() || keszlet.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Cím, egységár és készlet megadása kötelező.");
+                        return;
+                    }
+
+                    int egysegar = Integer.parseInt(ar);
+                    short keszletValue = Short.parseShort(keszlet);
+                    LocalDate kiadasEve = ev.isEmpty() ? null : LocalDate.of(Integer.parseInt(ev), 1, 1);
+
+                    Konyv book = new Konyv(
+                            existingBook != null ? existingBook.getKonyvId() : 0,
+                            szerzok, cim, kiado, kiadasEve, egysegar, keszletValue
+                    );
+
+                    KonyvDAO dao = new KonyvDAO();
+                    if (existingBook == null) {
+                        dao.insertBook(book);
+                    } else {
+                        dao.updateBook(book);
+                    }
+
+                    loadBooks();
+                    dispose();
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Hiba: " + ex.getMessage(), "Hibás adat", JOptionPane.ERROR_MESSAGE);
                 }
             });
         }
