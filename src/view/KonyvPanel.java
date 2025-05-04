@@ -63,7 +63,7 @@ public class KonyvPanel extends JPanel {
         }
 
         JOptionPane.showMessageDialog(this,
-                konyvek.size() + " konyvek betoltve.",
+                konyvek.size() + " konyv betoltve.",
                 "A betoltes kesz",
                 JOptionPane.INFORMATION_MESSAGE);
     }
