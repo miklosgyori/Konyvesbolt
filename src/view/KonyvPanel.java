@@ -6,6 +6,7 @@ import model.KonyvDAO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class KonyvPanel extends JPanel {
         // tabla modell
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{
-                "ID", "Szerzők", "Cím", "Kiadó", "Kiadás Éve", "Egységár", "Készlet"
+                "ID", "Szerzok", "Cim", "Kiado", "Kiadas eve", "Egysegar", "Keszlet"
         });
 
         // tabla
@@ -69,7 +70,7 @@ public class KonyvPanel extends JPanel {
     }
 
     /**
-     * Betolti az AB-ben levo konyvek teljes listajat.
+     * Betolti az AB-ben levo konyvek teljes listajat, megjeleniti a GUI-n.
      */
     private void loadBooks() {
         tableModel.setRowCount(0);
@@ -96,8 +97,11 @@ public class KonyvPanel extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Uj konyvet ad az adatbazishoz, a felhasznalo altal a GUI-ban megadott adatokkal.
+     */
     private void addNewBook() {
-        JOptionPane.showMessageDialog(this, "Add book form not yet implemented.");
+        new AddBookDialog().setVisible(true);
     }
 
     private void editSelectedBook() {
@@ -109,7 +113,7 @@ public class KonyvPanel extends JPanel {
     }
 
     /**
-     * Cim vagy cim toredeke alapjan keres konyvet
+     * Cim vagy cim toredeke alapjan keres konyvet, megjeleniti a GUI-n.
      */
     private void searchBooks() {
         String keyword = searchField.getText().trim();
@@ -145,6 +149,78 @@ public class KonyvPanel extends JPanel {
                     "Nem talalhato konyv ezzel a cimmel/cimtoredekkel: \"" + keyword + "\".",
                     "Nincs talalat!",
                     JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    /**
+     * Belso osztaly: input form definialas; a megadott adatokkal uj konyv hozzaadasa az AB-hoz.
+     */
+    private class AddBookDialog extends JDialog {
+        private JTextField szerzokField, cimField, kiadoField, evField, arField, keszletField;
+        private JButton saveButton, cancelButton;
+
+        public AddBookDialog() {
+            setTitle("Uj konyv hozzaadasa az adatbazishoz");
+            setModal(true);
+            setLayout(new GridLayout(7, 2, 8, 4));
+            setSize(400, 300);
+            setLocationRelativeTo(KonyvPanel.this);
+
+            // Fields
+            szerzokField = new JTextField();
+            cimField = new JTextField();
+            kiadoField = new JTextField();
+            evField = new JTextField();       // format: YYYY
+            arField = new JTextField();
+            keszletField = new JTextField();
+
+            // Buttons
+            saveButton = new JButton("Mentes");
+            cancelButton = new JButton("Torles (Cancel)");
+
+            // Add components
+            add(new JLabel("Szerzok:")); add(szerzokField);
+            add(new JLabel("Cim:*"));    add(cimField);
+            add(new JLabel("Kiado:"));   add(kiadoField);
+            add(new JLabel("Kiadas eve:")); add(evField);
+            add(new JLabel("Egysegar:*"));  add(arField);
+            add(new JLabel("Keszlet:*"));   add(keszletField);
+            add(saveButton); add(cancelButton);
+
+            // Button actions
+            cancelButton.addActionListener(e -> dispose());
+
+            saveButton.addActionListener(e -> {
+                try {
+                    String szerzok = szerzokField.getText().trim();
+                    String cim = cimField.getText().trim();
+                    String kiado = kiadoField.getText().trim();
+                    String ev = evField.getText().trim();
+                    String ar = arField.getText().trim();
+                    String keszlet = keszletField.getText().trim();
+
+                    // Validation
+                    if (cim.isEmpty() || ar.isEmpty() || keszlet.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Cim, egysegar es keszlet megadasa kotelezo!");
+                        return;
+                    }
+
+                    int egysegar = Integer.parseInt(ar);
+                    short keszletValue = Short.parseShort(keszlet);
+                    LocalDate kiadasEve = ev.isEmpty() ? null : LocalDate.of(Integer.parseInt(ev), 1, 1);
+
+                    Konyv newBook = new Konyv(szerzok, cim, kiado, kiadasEve, egysegar, keszletValue);
+
+                    KonyvDAO dao = new KonyvDAO();
+                    dao.insertBook(newBook);
+
+                    loadBooks(); // refresh table
+                    dispose();
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Hiba: " + ex.getMessage(), "Hibas adat!", JOptionPane.ERROR_MESSAGE);
+                }
+            });
         }
     }
 }
