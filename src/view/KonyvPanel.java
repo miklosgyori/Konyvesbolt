@@ -36,7 +36,7 @@ public class KonyvPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
 
         // gombok
-        loadButton = new JButton("Konyvek betoltese");
+        loadButton = new JButton("Teljes konyvlista betoltese");
         loadButton.addActionListener(e -> loadBooks());
 
         addButton = new JButton("Uj konyv rogzitese");
@@ -48,7 +48,7 @@ public class KonyvPanel extends JPanel {
         deleteButton = new JButton("Konyv torlese");
         deleteButton.addActionListener(e -> deleteSelectedBook());
 
-        searchButton = new JButton("Konyv keresese");
+        searchButton = new JButton("Konyv keresese cim/cimtoredek alapjan");
         searchButton.addActionListener(e -> searchBooks());
 
         searchField = new JTextField(20);
@@ -68,8 +68,11 @@ public class KonyvPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Betolti az AB-ben levo konyvek teljes listajat.
+     */
     private void loadBooks() {
-        tableModel.setRowCount(0); // clear existing rows
+        tableModel.setRowCount(0);
 
         KonyvDAO dao = new KonyvDAO();
         List<Konyv> konyvek = dao.getAllBooks();
@@ -105,7 +108,43 @@ public class KonyvPanel extends JPanel {
         JOptionPane.showMessageDialog(this, "Delete functionality not yet implemented.");
     }
 
+    /**
+     * Cim vagy cim toredeke alapjan keres konyvet
+     */
     private void searchBooks() {
-        JOptionPane.showMessageDialog(this, "Search not yet implemented.");
+        String keyword = searchField.getText().trim();
+
+        if (keyword.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Add meg a cimet vagy a cim egy reszet!",
+                    "Keresokifejezes szukseges!",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        KonyvDAO dao = new KonyvDAO();
+        List<Konyv> results = dao.searchBooksByTitle(keyword);
+
+        tableModel.setRowCount(0); // Clear table before showing new results
+
+        for (Konyv k : results) {
+            Object[] row = new Object[]{
+                    k.getKonyvId(),
+                    k.getSzerzok(),
+                    k.getCim(),
+                    k.getKiado(),
+                    k.getKiadasEve(),
+                    k.getEgysegar(),
+                    k.getKeszlet()
+            };
+            tableModel.addRow(row);
+        }
+
+        if (results.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Nem talalhato konyv ezzel a cimmel/cimtoredekkel: \"" + keyword + "\".",
+                    "Nincs talalat!",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
