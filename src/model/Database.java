@@ -4,15 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * A postgres adatbazissal valo kapcsolat definialasa, a kapcsolat letrehozasa es lezarasa, kivetelkezelessel.
+ */
 public class Database {
 
     // Database connection parameters
     private static final String URL = "jdbc:postgresql://localhost:5488/postgres";
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
-
     private static Connection connection = null;
 
+    /**
+     * A kapcsolat letrehozasa, kivetelkezelessel.
+     */
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
@@ -25,14 +30,16 @@ public class Database {
                 System.err.println("!!! PostgreSQL JDBC driver nem talalhato.");
                 throw new SQLException(e);
             } catch (SQLException e) {
-                System.err.println("!!! Nem sikerult kapcoslodni az adatbazishoz.");
+                System.err.println("!!! Nem sikerult kapcsolodni az adatbazishoz.");
                 throw e;
             }
         }
         return connection;
     }
 
-    // Optional: Close the connection manually
+    /**
+     * A kapcsolat "manualis" lezarasa, kivetelkezelessel.
+     */
     public static void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
