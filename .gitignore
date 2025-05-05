@@ -3,6 +3,7 @@ working_notes.txt
 .idea/
 *iml
 out/
+docker/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
