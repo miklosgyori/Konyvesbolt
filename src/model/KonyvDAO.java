@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Data Object Access osztaly, a Konyv osztaly es a konyv AB tabla kozotti interakciokra
+ * Ismert korlat: hibauzenetek egy reszet csak a konzolra irja ki.
  */
 public class KonyvDAO {
 
@@ -35,8 +36,7 @@ public class KonyvDAO {
             }
 
         } catch (SQLException e) {
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
-            System.err.println("!!! Hiba a konyvek lekeresenel: " + e.getMessage());
+             System.err.println("!!! Hiba a konyvek lekeresenel: " + e.getMessage());
         }
 
         return konyvek;
@@ -64,11 +64,9 @@ public class KonyvDAO {
             stmt.setShort(6, k.getKeszlet());
 
             stmt.executeUpdate();
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.out.println("A konyv sikeresen beillesztve az adatbazisba");
 
         } catch (SQLException e) {
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.err.println("!!! Hiba a konyv beillesztesenel: " + e.getMessage());
         }
     }
@@ -96,11 +94,9 @@ public class KonyvDAO {
             stmt.setInt(7, k.getKonyvId());
 
             stmt.executeUpdate();
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.out.println("A konyv adatai sikeresen frissitve az adatbazisban.");
 
         } catch (SQLException e) {
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.err.println("!!! Hiba a konyv adatainak frissitesenel:  " + e.getMessage());
         }
     }
@@ -118,7 +114,6 @@ public class KonyvDAO {
             stmt.setInt(1, konyvId);
             int affectedRows = stmt.executeUpdate();
 
-            // TODO: else agon ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             if (affectedRows > 0) {
                 System.out.println("Konyv sikeresen torolve.");
             } else {
@@ -126,7 +121,6 @@ public class KonyvDAO {
             }
 
         } catch (SQLException e) {
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.err.println("!!! Hiba a konyv torlesenel: " + e.getMessage());
         }
     }
@@ -161,7 +155,6 @@ public class KonyvDAO {
             }
 
         } catch (SQLException e) {
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.err.println("!!! Hiba a cim alapjan torteno kereses soran: " + e.getMessage());
         }
 
@@ -195,7 +188,6 @@ public class KonyvDAO {
             }
 
         } catch (SQLException e) {
-            // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
             System.err.println("Hiba a konyv azonosito alapjan torteno lehivasaban: " + e.getMessage());
         }
 

@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Data Object Access osztaly, a Rendeles osztaly es a 'rendeles' AB tabla kozotti interakciokra
+ * Ismert korlat: hibauzenetek egy reszet csak a konzolra irja ki.
  */
 public class RendelesDAO {
 

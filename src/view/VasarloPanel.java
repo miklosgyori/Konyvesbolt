@@ -80,7 +80,7 @@ public class VasarloPanel extends JPanel {
     }
 
     /**
-     * Az adatbazisbol id alapjan kivalasztott vasarlo mezoit modithatja a felhasznalo a GUI-n,
+     * Az adatbazisbol id alapjan kivalasztott vasarlo mezoit modosithatja a felhasznalo a GUI-n,
      * a valtozasokat menti az adatbazisban.
      */
     private void editCustomerById() {
@@ -107,7 +107,7 @@ public class VasarloPanel extends JPanel {
      * Az adatbazisbol id alapjan kivalasztott vasarlot torli az adatbazisbol.
      */
     private void deleteCustomerById() {
-        String input = JOptionPane.showInputDialog(this, "Add meg a torlendo vasarlo azonositojat::");
+        String input = JOptionPane.showInputDialog(this, "Add meg a torlendo vasarlo azonositojat:");
 
         if (input == null || input.trim().isEmpty()) return;
 
@@ -140,7 +140,7 @@ public class VasarloPanel extends JPanel {
 
         public VasarloFormDialog(Vasarlo existing) {
             this.existing = existing;
-            setTitle(existing == null ? "➕ Add Customer" : "📝 Edit Customer");
+            setTitle(existing == null ? "Vasarlo hozzaadasa" : "📝 Vasarlo modositasa");
             setModal(true);
             setLayout(new GridLayout(4, 2, 8, 4));
             setSize(400, 200);

@@ -10,12 +10,10 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 
-// TODO: JAVADoc, egyeb annotaciok, kommunikacio magyaritasa, ha teszteles OK.
-// TODO: dokumentacioba: ismert hiba: a megye a GUI-n szabadon allithato, noha az az adott azonositoju vasarlo eseten
-//  az adatbazisban a vasarlo tablaban rogzitett, nem modosithato
-
 /**
  * A rendelesek kezelesere szolgalo GUI panel
+ * Ismert hiba: a megye a GUI-n szabadon allithato, noha az az adott azonositoju vasarlo eseten
+ * az adatbazisban a vasarlo tablaban rogzitett, nem modosithato, osszetett primary key eleme.
  */
 public class RendelesPanel extends JPanel {
 
@@ -28,17 +26,17 @@ public class RendelesPanel extends JPanel {
 
         // Tabla modell
         tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new String[]{"ID", "Vásárló ID", "Dátum", "Megye", "Státusz"});
+        tableModel.setColumnIdentifiers(new String[]{"Rendeles azonosito", "Vasarlo azonosito", "Datum", "Megye", "Statusz"});
 
         table = new JTable(tableModel);
         table.setAutoCreateRowSorter(true);
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Buttons
-        loadButton = new JButton("📥 Load");
-        addButton = new JButton("➕ Add");
-        editButton = new JButton("📝 Edit");
-        deleteButton = new JButton("🗑 Delete");
+        // Gombok
+        loadButton = new JButton("Teljes redneleslista betoltese");
+        addButton = new JButton("Uj rendeles rogzitese");
+        editButton = new JButton("Rendeles adatainak szerkesztese");
+        deleteButton = new JButton("Rendeles torlese");
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.add(loadButton);
@@ -49,13 +47,16 @@ public class RendelesPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Event handlers
+        // Esemenykezelok
         loadButton.addActionListener(e -> loadOrders());
         addButton.addActionListener(e -> addNewOrder());
         editButton.addActionListener(e -> editOrderById());
         deleteButton.addActionListener(e -> deleteOrderById());
     }
 
+    /**
+     * Betolti az AB-ben levo rendelesek teljes listajat, megjeleniti a GUI-n.
+     */
     private void loadOrders() {
         tableModel.setRowCount(0);
         List<Rendeles> orders = new RendelesDAO().getAllOrders();
@@ -68,49 +69,61 @@ public class RendelesPanel extends JPanel {
                     r.getStatusz().toDbValue()
             });
         }
-        JOptionPane.showMessageDialog(this, orders.size() + " order(s) loaded.");
+        JOptionPane.showMessageDialog(this, orders.size() + "  rendeles betoltve.");
     }
 
+    /**
+     * Uj rendelest ad az adatbazishoz, a felhasznalo altal a GUI-ban megadott adatokkal.
+     */
     private void addNewOrder() {
         new OrderFormDialog(null).setVisible(true);
     }
 
+    /**
+     * Az adatbazisbol id alapjan kivalasztott rendeles mezoit modosithatja a felhasznalo a GUI-n,
+     * a valtozasokat menti az adatbazisban.
+     */
     private void editOrderById() {
-        String input = JOptionPane.showInputDialog(this, "Enter the order ID to edit:");
+        String input = JOptionPane.showInputDialog(this, "Add meg a modositando rendeles azonositojat:");
         if (input == null || input.trim().isEmpty()) return;
 
         try {
             int id = Integer.parseInt(input.trim());
             Rendeles order = new RendelesDAO().getOrderById(id);
             if (order == null) {
-                JOptionPane.showMessageDialog(this, "No order with ID: " + id);
+                JOptionPane.showMessageDialog(this, "Nem talaltunk rendelest ezzel az azonositoval: " + id);
             } else {
                 new OrderFormDialog(order).setVisible(true);
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid ID format.");
+            JOptionPane.showMessageDialog(this, "Ervenytelen azonosito formatum.");
         }
     }
 
+    /**
+     * Az adatbazisbol id alapjan kivalasztott rendelest torli az adatbazisbol.
+     */
     private void deleteOrderById() {
-        String input = JOptionPane.showInputDialog(this, "Enter the order ID to delete:");
+        String input = JOptionPane.showInputDialog(this, "Add meg a torlendo rendeles azonositojat:");
         if (input == null || input.trim().isEmpty()) return;
 
         try {
             int id = Integer.parseInt(input.trim());
             int confirm = JOptionPane.showConfirmDialog(this,
-                    "Delete order with ID " + id + "?",
-                    "Confirm", JOptionPane.YES_NO_OPTION);
+                    "Biztos, hogy torolni akarod ezt a vasarlot: " + id + "?",
+                    "Torles megerositese", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 new RendelesDAO().deleteOrder(id);
                 loadOrders();
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid ID format.");
+            JOptionPane.showMessageDialog(this, "Ervenytelen azonosito formatum.");
         }
     }
 
-    // Inner dialog class
+    /**
+     * Rendeles hozzaadasara es modositasara szolgalo FormDialog
+     */
     private class OrderFormDialog extends JDialog {
         private JTextField vasarloIdField;
         private JComboBox<String> megyeBox, statuszBox;
@@ -119,7 +132,7 @@ public class RendelesPanel extends JPanel {
 
         public OrderFormDialog(Rendeles existing) {
             this.existing = existing;
-            setTitle(existing == null ? "Add Order" : "Edit Order");
+            setTitle(existing == null ? "Rendeles hozzaadasa" : "Rendeles modositasa");
             setModal(true);
             setLayout(new GridLayout(5, 2, 8, 4));
             setSize(400, 220);
@@ -146,9 +159,9 @@ public class RendelesPanel extends JPanel {
             saveButton = new JButton("💾 Save");
             cancelButton = new JButton("❌ Cancel");
 
-            add(new JLabel("Vásárló ID:")); add(vasarloIdField);
+            add(new JLabel("Vasarlo azonosito:")); add(vasarloIdField);
             add(new JLabel("Megye:")); add(megyeBox);
-            add(new JLabel("Státusz:")); add(statuszBox);
+            add(new JLabel("Statusz:")); add(statuszBox);
             add(saveButton); add(cancelButton);
 
             cancelButton.addActionListener(e -> dispose());

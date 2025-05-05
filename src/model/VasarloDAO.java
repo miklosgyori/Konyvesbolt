@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Data Object Access osztaly, a Vasarlo osztaly es a vasarlo AB tabla kozotti interakciokra
+ * Ismert korlat: hibauzenetek egy reszet csak a konzolra irja ki.
  */
 public class VasarloDAO {
 
@@ -44,9 +45,7 @@ public class VasarloDAO {
      * @param vasarlo A beszurando Vasarlo objektum
      */
     public void insertCustomer(Vasarlo vasarlo) {
-        // TODO: torolni, ha teszteles OK:
-        // String sql = "INSERT INTO konyvesbolt.vasarlo (nev, cim, megye) VALUES (?, ?, ?)";
-        String sql = "INSERT INTO konyvesbolt.vasarlo (nev, cim, megye) VALUES (?, ?, ?::konyvesbolt.county)";
+       String sql = "INSERT INTO konyvesbolt.vasarlo (nev, cim, megye) VALUES (?, ?, ?::konyvesbolt.county)";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -68,8 +67,6 @@ public class VasarloDAO {
      * @param vasarlo A modositando Vasarlo objektum
      */
     public void updateCustomer(Vasarlo vasarlo) {
-        // TODO: torolni, ha teszteles OK:
-        // String sql = "UPDATE konyvesbolt.vasarlo SET nev = ?, cim = ?, megye = ? WHERE vasarlo_id = ?";
         String sql = "UPDATE konyvesbolt.vasarlo SET nev = ?, cim = ?, megye = ?::konyvesbolt.county WHERE vasarlo_id = ?";
 
         try (Connection conn = Database.getConnection();
