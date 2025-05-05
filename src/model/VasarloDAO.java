@@ -109,7 +109,7 @@ public class VasarloDAO {
 
     /**
      * id alapjan kikeres es visszaad egy vasarlot.
-     * @param vasarloID, a keresendo konyv id-je
+     * @param vasarloID, a keresendo vasarlo id-je
      * @return vasarlo vs null (ha a parameterkent megadott id-val nem letezik vasarlo az AB-ben)
      */
     public Vasarlo getCustomerById(int vasarloID) {
