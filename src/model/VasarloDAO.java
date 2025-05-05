@@ -44,7 +44,9 @@ public class VasarloDAO {
      * @param vasarlo A beszurando Vasarlo objektum
      */
     public void insertCustomer(Vasarlo vasarlo) {
-        String sql = "INSERT INTO konyvesbolt.vasarlo (nev, cim, megye) VALUES (?, ?, ?)";
+        // TODO: torolni, ha teszteles OK:
+        // String sql = "INSERT INTO konyvesbolt.vasarlo (nev, cim, megye) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO konyvesbolt.vasarlo (nev, cim, megye) VALUES (?, ?, ?::konyvesbolt.county)";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -66,7 +68,9 @@ public class VasarloDAO {
      * @param vasarlo A modositando Vasarlo objektum
      */
     public void updateCustomer(Vasarlo vasarlo) {
-        String sql = "UPDATE konyvesbolt.vasarlo SET nev = ?, cim = ?, megye = ? WHERE vasarlo_id = ?";
+        // TODO: torolni, ha teszteles OK:
+        // String sql = "UPDATE konyvesbolt.vasarlo SET nev = ?, cim = ?, megye = ? WHERE vasarlo_id = ?";
+        String sql = "UPDATE konyvesbolt.vasarlo SET nev = ?, cim = ?, megye = ?::konyvesbolt.county WHERE vasarlo_id = ?";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
