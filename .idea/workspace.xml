@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="07731ce9-08b1-4d01-a2df-bf8f4624a55a" name="Changes" comment="creating project, adding README.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/KonyvDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/KonyvDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/RendelesDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/RendelesDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/VasarloDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/VasarloDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/RendelesPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/RendelesPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/VasarloPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/VasarloPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MainWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
