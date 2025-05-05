@@ -16,6 +16,7 @@ public class MainWindow extends JFrame {
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("📚 Konyvek", new KonyvPanel());
         tabs.addTab("👤 Vasarlok", new VasarloPanel());
+        tabs.addTab("🛒 Rendelések", new RendelesPanel());
 
         add(tabs);
         setVisible(true);

@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+// TODO: dokumentacioba: ismert hiba: a megye a GUI-n szabadon allithato, noha az az adott azonositoju vasarlo eseten
+//  az adatbazisban a vasarlo tablaban rogzitett, nem modosithato
 /**
  * A vasarlok kezelesere szolgalo GUI panel
  */
@@ -28,7 +30,7 @@ public class VasarloPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Buttons
-        loadButton = new JButton("Teljes konyvlista betoltese");
+        loadButton = new JButton("Teljes vasarlolista betoltese");
         addButton = new JButton("Uj vasarlo rogzitese");
         editButton = new JButton("Vasarlo adatainak szerkesztese");
         deleteButton = new JButton("Vasarlo torlese");
