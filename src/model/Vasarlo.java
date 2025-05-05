@@ -31,7 +31,7 @@ public class Vasarlo {
         Veszprem,
         Zala;
 
-        // a JAVA kompatibilis Enum neveket alakitja az AB-ben hasznaltakra: _ csere -
+        // a JAVA kompatibilis Enum neveket alakitja az AB-ben hasznaltakra: '_' csere '-'
         public String toDbValue() {
             return this.name().replace('_', '-');
         }

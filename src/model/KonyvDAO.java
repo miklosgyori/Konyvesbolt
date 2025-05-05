@@ -196,7 +196,7 @@ public class KonyvDAO {
 
         } catch (SQLException e) {
             // TODO: ne csak konzolra, hanem GUI-n is irja ki a hibauzenetet!
-            System.err.println("Error fetching book by ID: " + e.getMessage());
+            System.err.println("Hiba a konyv azonosito alapjan torteno lehivasaban: " + e.getMessage());
         }
 
         return null;
