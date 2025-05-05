@@ -11,6 +11,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 // TODO: JAVADoc, egyeb annotaciok, kommunikacio magyaritasa, ha teszteles OK.
+// TODO: dokumentacioba: ismert hiba: a megye a GUI-n szabadon allithato, noha az az adott azonositoju vasarlo eseten
+//  az adatbazisban a vasarlo tablaban rogzitett, nem modosithato
+
+/**
+ * A rendelesek kezelesere szolgalo GUI panel
+ */
 public class RendelesPanel extends JPanel {
 
     private JTable table;
@@ -20,10 +26,12 @@ public class RendelesPanel extends JPanel {
     public RendelesPanel() {
         setLayout(new BorderLayout());
 
-        // Table setup
+        // Tabla modell
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"ID", "Vásárló ID", "Dátum", "Megye", "Státusz"});
+
         table = new JTable(tableModel);
+        table.setAutoCreateRowSorter(true);
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Buttons

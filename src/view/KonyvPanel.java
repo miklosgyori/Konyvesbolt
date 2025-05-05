@@ -34,6 +34,7 @@ public class KonyvPanel extends JPanel {
 
         // tabla
         table = new JTable(tableModel);
+        table.setAutoCreateRowSorter(true);
         JScrollPane scrollPane = new JScrollPane(table);
 
         // gombok
