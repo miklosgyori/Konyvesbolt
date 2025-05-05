@@ -104,13 +104,12 @@ public class KonyvPanel extends JPanel {
         new BookFormDialog(null).setVisible(true);
     }
 
-    // TODO: angol nyelvu dialogok magyarra!
     /**
      * Az adatbazisbol id alapjan kivalasztott konyv mezoit modithatja a felhasznalo a GUI-n,
      * a valtozasokat menti az adatbazisban.
      */
     private void editSelectedBook() {
-        String input = JOptionPane.showInputDialog(this, "Enter the Book ID to edit:");
+        String input = JOptionPane.showInputDialog(this, "Add meg a modositando konyv azonositojat");
 
         if (input == null || input.trim().isEmpty()) {
             return; // Cancelled or empty input
@@ -123,7 +122,7 @@ public class KonyvPanel extends JPanel {
             Konyv book = dao.getBookById(id);
 
             if (book == null) {
-                JOptionPane.showMessageDialog(this, "No book found with ID: " + id,
+                JOptionPane.showMessageDialog(this, "Nem talaltunk konyvet ezzel az azonositoval: " + id,
                         "Not Found", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -131,16 +130,15 @@ public class KonyvPanel extends JPanel {
             new BookFormDialog(book).setVisible(true);
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid ID format.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ervenytelen azonosito formatum.", "Hiba!", JOptionPane.ERROR_MESSAGE);
         }
     }
-    // TODO: angol nyelvu dialogok magyarra!
 
     /**
      * Id-val azonositott konyvet torol az AB-bol, megerosites utan.
      */
     private void deleteSelectedBook() {
-        String input = JOptionPane.showInputDialog(this, "Enter the Book ID to delete:");
+        String input = JOptionPane.showInputDialog(this, "Add meg a torlendo konyv azonositojat:");
 
         if (input == null || input.trim().isEmpty()) {
             return; // Cancelled or empty
@@ -150,8 +148,8 @@ public class KonyvPanel extends JPanel {
             int id = Integer.parseInt(input.trim());
 
             int confirm = JOptionPane.showConfirmDialog(this,
-                    "Are you sure you want to delete book with ID " + id + "?",
-                    "Confirm Deletion",
+                    "Biztos, hogy torolni akarod ezt a konyvet: " + id + "?",
+                    "Torles megerositese",
                     JOptionPane.YES_NO_OPTION);
 
             if (confirm != JOptionPane.YES_OPTION) {
@@ -164,8 +162,8 @@ public class KonyvPanel extends JPanel {
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
-                    "Invalid ID format.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    "Ervenytelen azonosito formatum.",
+                    "Hiba!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -208,79 +206,6 @@ public class KonyvPanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
-    // TODO: torolheto, ha a BookFormDIalog (alabb) jol mukodik
-    /**
-     * Belso osztaly: input form definialas; a megadott adatokkal uj konyv hozzaadasa az AB-hoz.
-     */
-    /* private class AddBookDialog extends JDialog {
-        private JTextField szerzokField, cimField, kiadoField, evField, arField, keszletField;
-        private JButton saveButton, cancelButton;
-
-        public AddBookDialog() {
-            setTitle("Uj konyv hozzaadasa az adatbazishoz");
-            setModal(true);
-            setLayout(new GridLayout(7, 2, 8, 4));
-            setSize(400, 300);
-            setLocationRelativeTo(KonyvPanel.this);
-
-            // Fields
-            szerzokField = new JTextField();
-            cimField = new JTextField();
-            kiadoField = new JTextField();
-            evField = new JTextField();       // format: YYYY
-            arField = new JTextField();
-            keszletField = new JTextField();
-
-            // Buttons
-            saveButton = new JButton("Mentes");
-            cancelButton = new JButton("Torles (Cancel)");
-
-            // Add components
-            add(new JLabel("Szerzok:")); add(szerzokField);
-            add(new JLabel("Cim:*"));    add(cimField);
-            add(new JLabel("Kiado:"));   add(kiadoField);
-            add(new JLabel("Kiadas eve:")); add(evField);
-            add(new JLabel("Egysegar:*"));  add(arField);
-            add(new JLabel("Keszlet:*"));   add(keszletField);
-            add(saveButton); add(cancelButton);
-
-            // Button actions
-            cancelButton.addActionListener(e -> dispose());
-
-            saveButton.addActionListener(e -> {
-                try {
-                    String szerzok = szerzokField.getText().trim();
-                    String cim = cimField.getText().trim();
-                    String kiado = kiadoField.getText().trim();
-                    String ev = evField.getText().trim();
-                    String ar = arField.getText().trim();
-                    String keszlet = keszletField.getText().trim();
-
-                    // Validation
-                    if (cim.isEmpty() || ar.isEmpty() || keszlet.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Cim, egysegar es keszlet megadasa kotelezo!");
-                        return;
-                    }
-
-                    int egysegar = Integer.parseInt(ar);
-                    short keszletValue = Short.parseShort(keszlet);
-                    LocalDate kiadasEve = ev.isEmpty() ? null : LocalDate.of(Integer.parseInt(ev), 1, 1);
-
-                    Konyv newBook = new Konyv(szerzok, cim, kiado, kiadasEve, egysegar, keszletValue);
-
-                    KonyvDAO dao = new KonyvDAO();
-                    dao.insertBook(newBook);
-
-                    loadBooks(); // refresh table
-                    dispose();
-
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Hiba: " + ex.getMessage(), "Hibas adat!", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-        }
-    }*/
 
      /**
      * Belso osztaly: input form definialas; a megadott adatokkal uj konyv hozzaadasa az AB-hoz VAGY letezo konyv
