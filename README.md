@@ -2,6 +2,7 @@ p# Könyvesbolt-kezelő alkalmazás (Java Swing + PostgreSQL)
 
 Asztali Java alkalmazás, amely egy könyvesbolt könyveit, vásárlóit és rendeléseit kezeli. A grafikus felhasználói
 felület Swing alapú, az adatok egy PostgreSQL adatbázisban tárolódnak, Docker konténerben futtatva.
+Ezt az adatbázist a korábbi 'Adatbázis szerverek' kurzus beadandó keretében hoztam létre.
 
 ---
 
@@ -16,7 +17,7 @@ Kurzus: Alkalmazás-fejlesztési technológiák
 - Java 18
 - Swing (Java GUI)
 - JDBC (adatbázis elérés)
-- PostgreSQL (Docker konténerben)
+- PostgreSQL (Docker konténerben) => A korábbi 'Adatbázis szerverek' kurzus beadandó keretében létrehozott AB.
 - IntelliJ IDEA (Community Edition)
 
 ---
