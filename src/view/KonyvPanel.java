@@ -104,6 +104,7 @@ public class KonyvPanel extends JPanel {
         new BookFormDialog(null).setVisible(true);
     }
 
+    // TODO: angol nyelvu dialogok magyarra!
     /**
      * Az adatbazisbol id alapjan kivalasztott konyv mezoit modithatja a felhasznalo a GUI-n,
      * a valtozasokat menti az adatbazisban.
@@ -133,9 +134,39 @@ public class KonyvPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Invalid ID format.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    // TODO: angol nyelvu dialogok magyarra!
 
+    /**
+     * Id-val azonositott konyvet torol az AB-bol, megerosites utan.
+     */
     private void deleteSelectedBook() {
-        JOptionPane.showMessageDialog(this, "Delete functionality not yet implemented.");
+        String input = JOptionPane.showInputDialog(this, "Enter the Book ID to delete:");
+
+        if (input == null || input.trim().isEmpty()) {
+            return; // Cancelled or empty
+        }
+
+        try {
+            int id = Integer.parseInt(input.trim());
+
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Are you sure you want to delete book with ID " + id + "?",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return; // Cancelled
+            }
+
+            KonyvDAO dao = new KonyvDAO();
+            dao.deleteBook(id);
+            loadBooks(); // refresh the table
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid ID format.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -251,7 +282,7 @@ public class KonyvPanel extends JPanel {
         }
     }*/
 
-    /**
+     /**
      * Belso osztaly: input form definialas; a megadott adatokkal uj konyv hozzaadasa az AB-hoz VAGY letezo konyv
      * mezoinek szerkesztese.
      */
@@ -262,7 +293,7 @@ public class KonyvPanel extends JPanel {
 
         public BookFormDialog(Konyv bookToEdit) {
             this.existingBook = bookToEdit;
-            setTitle(bookToEdit == null ? "➕ Add New Book" : "📝 Edit Book");
+            setTitle(bookToEdit == null ? "Uj konyv hozzaadasa" : "Konyv adatainak szerkesztese");
             setModal(true);
             setLayout(new GridLayout(7, 2, 8, 4));
             setSize(400, 300);
@@ -289,16 +320,16 @@ public class KonyvPanel extends JPanel {
             }
 
             // Buttons
-            saveButton = new JButton("💾 Save");
-            cancelButton = new JButton("❌ Cancel");
+            saveButton = new JButton("Mentes");
+            cancelButton = new JButton("Megse");
 
             // Layout
-            add(new JLabel("Szerzők:")); add(szerzokField);
-            add(new JLabel("Cím:*"));    add(cimField);
-            add(new JLabel("Kiadó:"));   add(kiadoField);
-            add(new JLabel("Kiadás éve:")); add(evField);
-            add(new JLabel("Egységár:*"));  add(arField);
-            add(new JLabel("Készlet:*"));   add(keszletField);
+            add(new JLabel("Szerzok:")); add(szerzokField);
+            add(new JLabel("Cim:*"));    add(cimField);
+            add(new JLabel("Kiado:"));   add(kiadoField);
+            add(new JLabel("Kiadas eve:")); add(evField);
+            add(new JLabel("Egysegar:*"));  add(arField);
+            add(new JLabel("Keszlet:*"));   add(keszletField);
             add(saveButton); add(cancelButton);
 
             cancelButton.addActionListener(e -> dispose());
@@ -313,7 +344,7 @@ public class KonyvPanel extends JPanel {
                     String keszlet = keszletField.getText().trim();
 
                     if (cim.isEmpty() || ar.isEmpty() || keszlet.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Cím, egységár és készlet megadása kötelező.");
+                        JOptionPane.showMessageDialog(this, "Cim, egysegar es keszlet megadasa kotelezo!");
                         return;
                     }
 
@@ -337,7 +368,7 @@ public class KonyvPanel extends JPanel {
                     dispose();
 
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Hiba: " + ex.getMessage(), "Hibás adat", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Hiba: " + ex.getMessage(), "Hibas adat", JOptionPane.ERROR_MESSAGE);
                 }
             });
         }
