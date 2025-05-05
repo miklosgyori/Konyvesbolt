@@ -11,7 +11,7 @@ public class KonyvDAO {
 
     /**
      * lekerdezi az osszes konyvet az AB-bol
-     * @return ArrayList<Konyv> konyvek
+     * @return konyvek
      */
     public List<Konyv> getAllBooks() {
         List<Konyv> konyvek = new ArrayList<>();

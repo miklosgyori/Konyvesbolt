@@ -12,7 +12,7 @@ public class VasarloDAO {
 
     /**
      * lekerdezi az osszes vasarlot az AB-bol
-     * @return ArrayList<Vasarlo> vasarlok
+     * @return vasarlok
      */
     public List<Vasarlo> getAllCustomers() {
         List<Vasarlo> vasarlok = new ArrayList<>();
@@ -90,7 +90,7 @@ public class VasarloDAO {
 
     /**
      * Egy vasarlot torol az AB-bol, annak ID-ja alapjan
-     * @param vasarloId A torlendo vasarlo ID-ja.
+     * @param vasarloID
      */
     public void deleteCustomer(int vasarloID) {
         String sql = "DELETE FROM konyvesbolt.vasarlo WHERE vasarlo_id = ?";

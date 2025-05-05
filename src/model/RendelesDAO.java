@@ -12,7 +12,7 @@ public class RendelesDAO {
 
     /**
      * lekerdezi az osszes rendelest az AB-bol
-     * @return ArrayList<Rendeles> rendelesek
+     * @return rendelesek
      */
     public List<Rendeles> getAllOrders() {
         List<Rendeles> rendelesek = new ArrayList<>();
